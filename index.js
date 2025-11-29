@@ -168,14 +168,14 @@ const app = express();
 app.use(express.json());
 
 // Webhook endpoint
-app.post("/webhook", async (req, res) => {
-  try {
-    await bot.handleUpdate(req.body);
-    res.sendStatus(200);
-  } catch (err) {
-    console.log("Update error:", err);
-    res.sendStatus(500);
-  }
+app.post("/webhook", (req, res) => {
+  // Telegramga 200 OK darhol jo'natamiz
+  res.sendStatus(200);
+
+  // Bot update’ni async tarzda handle qilamiz
+  bot.handleUpdate(req.body).catch((err) => {
+    console.error("Update error:", err);
+  });
 });
 
 // Start server
