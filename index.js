@@ -178,6 +178,13 @@ bot.on("text", (ctx) => {
     ctx.reply("Murojaatingiz bekor qilindi.", Markup.removeKeyboard());
     delete userData[userId];
     showNewRequest[userId] = true; // Bekor qilinsa ham Yangi murojaat tugmasi chiqadi
+    // YANGI Murojaat tugmasini darhol ko'rsatish
+    ctx.reply(
+      "Agar yangi murojaat qoldirmoqchi bo‘lsangiz, pastdagi tugmani bosing:",
+      Markup.keyboard([["🆕 Yangi murojaat"]])
+        .resize()
+        .oneTime()
+    );
     return;
   }
 });
