@@ -7,7 +7,6 @@ const ADMIN_CHAT_ID = -1003113473319;
 
 // User data saqlash uchun ob'ekt
 const userData = {};
-const showNewRequest = {}; // foydalanuvchi “Yangi murojaat” tugmasini ko'rsatish flagi
 
 // ---------------- BOT LOGIKASI ----------------
 
@@ -18,9 +17,6 @@ bot.start((ctx) => {
 
   // Birinchi marta start bosganda Yangi murojaat tugmasi ko'rinmaydi
   const buttons = [["✳️ Taklif", "❗️ Shikoyat", "💬 Fikr"]];
-  if (showNewRequest[userId]) {
-    buttons.push(["🆕 Yangi murojaat"]);
-  }
 
   ctx.reply(
     "Assalomu alaykum! 👋\n\n" +
@@ -153,7 +149,8 @@ bot.on("text", (ctx) => {
     const data = userData[userId];
 
     ctx.reply(
-      "Rahmat! Murojaatingiz qabul qilindi. Tez orada ijobiy hal qilamiz. 😊\n\n"+"Yangi murojaat uchun /start bosing.",
+      "Rahmat! Murojaatingiz qabul qilindi. Tez orada ijobiy hal qilamiz. 😊\n\n" +
+        "Yangi murojaat uchun /start bosing.",
       Markup.removeKeyboard()
     );
 
@@ -170,7 +167,6 @@ bot.on("text", (ctx) => {
 
     // Murojaat tugagach, userData’ni tozalaymiz va Yangi murojaat tugmasini ko‘rsatamiz
     delete userData[userId];
-    showNewRequest[userId] = true;
     return;
   }
 
@@ -180,10 +176,8 @@ bot.on("text", (ctx) => {
     showNewRequest[userId] = true; // Bekor qilinsa ham Yangi murojaat tugmasi chiqadi
     // YANGI Murojaat tugmasini darhol ko'rsatish
     ctx.reply(
-      "Agar yangi murojaat qoldirmoqchi bo‘lsangiz, pastdagi tugmani bosing:",
-      Markup.keyboard([["🆕 Yangi murojaat"]])
-        .resize()
-        .oneTime()
+      "Agar yangi murojaat qoldirmoqchi bo‘lsangiz, /start bosing.",
+      Markup.removeKeyboard()
     );
     return;
   }
