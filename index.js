@@ -24,7 +24,7 @@ bot.start((ctx) => {
 
   ctx.reply(
     "Assalomu alaykum! 👋\n\n" +
-      "Siz ZIN-NUR Academy murojaatlar botidasiz.\n\n" +
+      "Siz ZIN-NUR Akademiyasi murojaatlar botidasiz.\n\n" +
       "Bu bot orqali siz:\n" +
       "• Taklif ✳️\n" +
       "• Shikoyat ❗️\n" +
@@ -153,7 +153,7 @@ bot.on("text", (ctx) => {
     const data = userData[userId];
 
     ctx.reply(
-      "Rahmat! Murojaatingiz qabul qilindi. Tez orada ijobiy hal qilamiz. 😊",
+      "Rahmat! Murojaatingiz qabul qilindi. Tez orada ijobiy hal qilamiz. 😊\n\n"+"Yangi murojaat uchun /start bosing.",
       Markup.removeKeyboard()
     );
 
