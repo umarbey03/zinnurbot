@@ -114,7 +114,7 @@ bot.on("text", (ctx) => {
     const data = userData[userId];
 
     ctx.reply(
-      "Rahmat! Murojaatingiz qabul qilindi. Tez orada ijobiy hal qilamiz. 😊",
+      "Rahmat! Murojaatingiz qabul qilindi. Tez orada ijobiy hal qilamiz. 😊\n\n"+"Yangi murojaat qoldirish uchun /start bosing.",
       Markup.removeKeyboard()
     );
 
@@ -134,7 +134,7 @@ bot.on("text", (ctx) => {
   }
 
   if (ctx.message.text === "❌ Bekor qilish") {
-    ctx.reply("Murojaatingiz bekor qilindi.", Markup.removeKeyboard());
+    ctx.reply("Murojaatingiz bekor qilindi.\n\n"+"Yangi murojaat qoldirish uchun /start bosing.", Markup.removeKeyboard());
     delete userData[userId];
     return;
   }
