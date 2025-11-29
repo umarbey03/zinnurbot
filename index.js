@@ -3,15 +3,10 @@ const { Telegraf, Markup } = require("telegraf");
 
 // Bot token — BotFather’dan olingan tokenni ENV orqali olish
 const bot = new Telegraf(process.env.BOT_TOKEN);
-const ADMIN_CHAT_ID = -1003113473319;
+const ADMIN_CHAT_ID = -5089354071;
 
 // User data saqlash uchun ob'ekt
 const userData = {};
-
-bot.on("message", (ctx) => {
-  console.log("Guruh chat info:", ctx.chat);
-  ctx.reply(`Guruh chat ID: ${ctx.chat.id}`);
-});
 
 // ---------------- BOT LOGIKASI ----------------
 
