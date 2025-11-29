@@ -10,21 +10,34 @@ const userData = {};
 
 // ---------------- BOT LOGIKASI ----------------
 
-// /start komandasi
+// /start komandasi va yangi murojaat tugmasi
 bot.start((ctx) => {
+  const userId = ctx.from.id;
+  // Har safar /start bosilganda eski ma'lumotni tozalaymiz
+  userData[userId] = {};
+
   ctx.reply(
     "Assalomu alaykum! 👋\n\n" +
-      "Siz ZIN-NUR Academy murojaatlar botidasiz.\n\n" +
+      "Siz ZIN-NUR Akademiyasi murojaatlar botidasiz.\n\n" +
       "Bu bot orqali siz:\n" +
       "• Taklif ✳️\n" +
       "• Shikoyat ❗️\n" +
       "• Fikr va mulohazalaringizni yuborishingiz mumkin 💬\n\n" +
       "Ismingizni yozishingiz yoki anonim xabar qoldirishingiz mumkin.\n\n" +
       "Boshlash uchun pastdagi tugmalardan birini tanlang:",
-    Markup.keyboard([["✳️ Taklif", "❗️ Shikoyat", "💬 Fikr"]])
+    Markup.keyboard([
+      ["✳️ Taklif", "❗️ Shikoyat", "💬 Fikr"],
+      ["🆕 Yangi murojaat"]
+    ])
       .oneTime()
       .resize()
   );
+});
+
+// Yangi murojaat tugmasi
+bot.hears("🆕 Yangi murojaat", (ctx) => {
+  ctx.telegram.sendMessage(ctx.chat.id, "Yangi murojaatni boshlaymiz...");
+  return bot.start(ctx); // /start funksiyasini chaqiramiz
 });
 
 // Murojaat turini tanlash
@@ -40,6 +53,7 @@ bot.hears(["✳️ Taklif", "❗️ Shikoyat", "💬 Fikr"], (ctx) => {
   );
 });
 
+// Filial tanlash
 bot.hears(["🏢 Uchtepa", "🏢 Sergeli"], (ctx) => {
   const userId = ctx.from.id;
   if (!userData[userId]) userData[userId] = {};
@@ -152,6 +166,7 @@ bot.on("text", (ctx) => {
         `Xabar: ${data.messageText}`
     );
 
+    // Murojaat tugagach, userData’ni tozalaymiz
     delete userData[userId];
     return;
   }
