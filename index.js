@@ -1,12 +1,9 @@
+const express = require("express");
 const { Telegraf, Markup } = require("telegraf");
 
-// Bot token — BotFather’dan olingan token
-const bot = new Telegraf("8571280451:AAEMNo5o8rZRoGfXWSzk0w7BURiJpIjkTBY");
+// Bot token — BotFather’dan olingan tokenni ENV orqali olish
+const bot = new Telegraf(process.env.BOT_TOKEN);
 const ADMIN_CHAT_ID = -1003113473319;
-
-// bot.on("text", (ctx) => {
-//   console.log(ctx.chat); // Bu terminalga guruh ID sini chiqaradi
-// });
 
 // User data saqlash uchun ob'ekt
 const userData = {};
@@ -169,8 +166,18 @@ bot.on("text", (ctx) => {
   }
 });
 
-// Botni ishga tushirish
-bot
-  .launch()
-  .then(() => console.log("Bot ishlamoqda..."))
-  .catch((err) => console.log("Xatolik:", err));
+// ---------------- EXPRESS SERVER ----------------
+const app = express();
+app.use(express.json());
+
+// Webhook endpoint
+app.post("/webhook", (req, res) => {
+  bot.handleUpdate(req.body);
+  res.sendStatus(200);
+});
+
+// Serverni ishga tushirish
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
