@@ -7,37 +7,39 @@ const ADMIN_CHAT_ID = -1003113473319;
 
 // User data saqlash uchun ob'ekt
 const userData = {};
+const showNewRequest = {}; // foydalanuvchi “Yangi murojaat” tugmasini ko'rsatish flagi
 
 // ---------------- BOT LOGIKASI ----------------
 
-// /start komandasi va yangi murojaat tugmasi
+// /start komandasi
 bot.start((ctx) => {
   const userId = ctx.from.id;
-  // Har safar /start bosilganda eski ma'lumotni tozalaymiz
-  userData[userId] = {};
+  userData[userId] = {}; // eski ma'lumotlarni tozalaymiz
+
+  // Birinchi marta start bosganda Yangi murojaat tugmasi ko'rinmaydi
+  const buttons = [["✳️ Taklif", "❗️ Shikoyat", "💬 Fikr"]];
+  if (showNewRequest[userId]) {
+    buttons.push(["🆕 Yangi murojaat"]);
+  }
 
   ctx.reply(
     "Assalomu alaykum! 👋\n\n" +
-      "Siz ZIN-NUR Akademiyasi murojaatlar botidasiz.\n\n" +
+      "Siz ZIN-NUR Academy murojaatlar botidasiz.\n\n" +
       "Bu bot orqali siz:\n" +
       "• Taklif ✳️\n" +
       "• Shikoyat ❗️\n" +
       "• Fikr va mulohazalaringizni yuborishingiz mumkin 💬\n\n" +
       "Ismingizni yozishingiz yoki anonim xabar qoldirishingiz mumkin.\n\n" +
       "Boshlash uchun pastdagi tugmalardan birini tanlang:",
-    Markup.keyboard([
-      ["✳️ Taklif", "❗️ Shikoyat", "💬 Fikr"],
-      ["🆕 Yangi murojaat"]
-    ])
-      .oneTime()
-      .resize()
+    Markup.keyboard(buttons).oneTime().resize()
   );
 });
 
 // Yangi murojaat tugmasi
 bot.hears("🆕 Yangi murojaat", (ctx) => {
-  ctx.telegram.sendMessage(ctx.chat.id, "Yangi murojaatni boshlaymiz...");
-  return bot.start(ctx); // /start funksiyasini chaqiramiz
+  const userId = ctx.from.id;
+  userData[userId] = {}; // yangi murojaat boshlash uchun ma'lumotlarni tozalaymiz
+  return bot.start(ctx); // start logikasini chaqiramiz
 });
 
 // Murojaat turini tanlash
@@ -166,14 +168,16 @@ bot.on("text", (ctx) => {
         `Xabar: ${data.messageText}`
     );
 
-    // Murojaat tugagach, userData’ni tozalaymiz
+    // Murojaat tugagach, userData’ni tozalaymiz va Yangi murojaat tugmasini ko‘rsatamiz
     delete userData[userId];
+    showNewRequest[userId] = true;
     return;
   }
 
   if (ctx.message.text === "❌ Bekor qilish") {
     ctx.reply("Murojaatingiz bekor qilindi.", Markup.removeKeyboard());
     delete userData[userId];
+    showNewRequest[userId] = true; // Bekor qilinsa ham Yangi murojaat tugmasi chiqadi
     return;
   }
 });
