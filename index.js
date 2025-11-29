@@ -8,6 +8,11 @@ const ADMIN_CHAT_ID = -1003113473319;
 // User data saqlash uchun ob'ekt
 const userData = {};
 
+bot.on("message", (ctx) => {
+  console.log("Guruh chat info:", ctx.chat);
+  ctx.reply(`Guruh chat ID: ${ctx.chat.id}`);
+});
+
 // ---------------- BOT LOGIKASI ----------------
 
 // /start komandasi
