@@ -3,7 +3,7 @@ const { Telegraf, Markup } = require("telegraf");
 
 // Bot token — BotFather’dan olingan tokenni ENV orqali olish
 const bot = new Telegraf(process.env.BOT_TOKEN);
-const ADMIN_CHAT_ID = -5380192351;
+const ADMIN_CHAT_ID = -5089354071;
 
 // User data saqlash uchun ob'ekt
 const userData = {};
