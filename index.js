@@ -8,6 +8,8 @@ const ADMIN_CHAT_ID = -1003113473319;
 // User data saqlash uchun ob'ekt
 const userData = {};
 
+// ---------------- BOT LOGIKASI ----------------
+
 // /start komandasi
 bot.start((ctx) => {
   ctx.reply(
@@ -28,9 +30,7 @@ bot.start((ctx) => {
 // Murojaat turini tanlash
 bot.hears(["✳️ Taklif", "❗️ Shikoyat", "💬 Fikr"], (ctx) => {
   const userId = ctx.from.id;
-  userData[userId] = {
-    category: ctx.message.text,
-  };
+  userData[userId] = { category: ctx.message.text };
 
   ctx.reply(
     "Qaysi filialga yo'naltiraylik? Iltimos tanlang:",
@@ -57,7 +57,6 @@ bot.hears(["🏢 Uchtepa", "🏢 Sergeli"], (ctx) => {
 bot.on("text", (ctx) => {
   const userId = ctx.from.id;
 
-  // Agar category hali belgilanmagan bo‘lsa
   if (!userData[userId] || !userData[userId].category) return;
 
   // Ism
@@ -98,7 +97,7 @@ bot.on("text", (ctx) => {
   if (!userData[userId].messageText) {
     userData[userId].messageText = ctx.message.text;
     ctx.reply(
-      "Agar istasangiz, o‘qiyotgan guruh nomingizni yozing (masalan: A1-8:00) yoki /skip bosing.\n \n" +
+      "Agar istasangiz, o‘qiyotgan guruh nomingizni yozing (masalan: A1-8:00) yoki /skip bosing.\n\n" +
         "Bu murojaatingiz tez ko'rib chiqlishiga yordam beradi.",
       Markup.keyboard([["/skip"]])
         .oneTime()
@@ -137,13 +136,11 @@ bot.on("text", (ctx) => {
   if (ctx.message.text === "✅ Ha, yuboring") {
     const data = userData[userId];
 
-    // Userga tasdiq
     ctx.reply(
       "Rahmat! Murojaatingiz qabul qilindi. Tez orada ijobiy hal qilamiz. 😊",
       Markup.removeKeyboard()
     );
 
-    // Admin guruhiga xabar yuborish
     bot.telegram.sendMessage(
       ADMIN_CHAT_ID,
       `📩 Yangi murojaat!\n\n` +
@@ -171,12 +168,17 @@ const app = express();
 app.use(express.json());
 
 // Webhook endpoint
-app.post("/webhook", (req, res) => {
-  bot.handleUpdate(req.body);
-  res.sendStatus(200);
+app.post("/webhook", async (req, res) => {
+  try {
+    await bot.handleUpdate(req.body);
+    res.sendStatus(200);
+  } catch (err) {
+    console.log("Update error:", err);
+    res.sendStatus(500);
+  }
 });
 
-// Serverni ishga tushirish
+// Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
